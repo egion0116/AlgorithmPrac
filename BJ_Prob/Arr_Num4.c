@@ -80,7 +80,7 @@ void CheckNumbers(char* Target, int Result[])
 
 int main(void)
 {
-	int Input = 1219402;
+	int Input = 0;
 	char Output[32] = { 0 };
 
 	int Operand1 = 0, Operand2 = 0, Operand3 = 0;
