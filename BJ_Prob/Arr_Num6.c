@@ -39,7 +39,7 @@ int main(void)
 	NewMean = NewSum / (double)N;
 
 	// 평균 소수점 둘째 자리까지 출력
-	printf("%.3lf\n", NewMean);
+	printf("%.5lf\n", NewMean);
 
 	return 0;
 }
