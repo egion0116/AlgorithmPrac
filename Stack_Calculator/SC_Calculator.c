@@ -83,7 +83,7 @@ double SC_Calculator(char* PostFixExp)
 			}
 			
 			// gcvt 함수로 소수점수를 문자열로 변환
-			_gcvt(Temp_Res, 10, Temp_Str);
+			gcvt(Temp_Res, 10, Temp_Str);
 
 			// 결과를 스택에 저장
 			LLS_Push(Cal_Stack, LLS_CreateNode(Temp_Str));

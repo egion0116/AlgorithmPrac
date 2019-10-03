@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-g -Wall
-OBJS=LLS_Stack.o LLS_Stack_Test.o
-TARGET=LLS_Stack_Test
+OBJS=SC_Test.o SC_Calculator.o SC_Basic.o LLS_Stack.o
+TARGET=SC_Test
 
 all: ${TARGET}
 
@@ -12,5 +12,8 @@ clean:
 ${TARGET} : ${OBJS}
 	${CC} -o $@ $^
 
-LLS_Stack_Test.o : LLS_Stack_Test.c LLS_Stack.h stdfx.h
-LLS_Stack_Test.o : LLS_Stack.c LLS_Stack.h stdfx.h
+SC_Test.o : stdfx.h SC_Calculator.c SC_Calculator.h SC_Basic.c SC_Basic.h
+SC_Calculator.o : stdfx.h SC_Calculator.c SC_Calculator.h SC_Basic.c SC_Basic.h LLS_Stack.c LLS_Stack.h
+SC_Basic.o : stdfx.h SC_Basic.c SC_Basic.h LLS_Stack.c LLS_Stack.h
+LLS_Stack.o : stdfx.h LLS_Stack.c LLS_Stack.h
+
