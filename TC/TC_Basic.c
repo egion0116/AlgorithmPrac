@@ -1,6 +1,5 @@
 #include "stdfx.h"
 #include "TC_Stack.h"
-#include "TC_BinaryTree.h"
 #include "TC_Basic.h"
 
 // 숫자 테이블
@@ -26,27 +25,26 @@ typedef enum {
 		-> 해결책 2의 맹점 : 단순히 뒤집으면 내부에 2자리수 이상 숫자들도 전부 뒤집어 진다...
 */
 
-double TreeSet(TreeNode* Root, char* PostfixExp, int Pos)
+// 사용법 -> 빈 트리를 보내야 한다. -> 수정예정..
+int TreeSet(TreeNode** Root, char* PostfixExp, int Pos)
 {
-    // Token을 다 읽었으면 끝낸다.
-    if (Pos == GetTokenNum(PostfixExp))
-        return 0.0;
-
     // 토큰 변수
     int Type = 0;
     char Token[10] = { 0 };
     
     // 후위표현식을 뒤에서부터 읽는다.
     Pos = Exp_Parser_Backward(Token, PostfixExp, Pos, &Type);
-    strcpy(Root->Data, Token);
 
-    if (Type == OPERAND)
+	// 받은 인자에 노드를 생성하고
+	(*Root) = CreateTreeNode(Token);
+	
+	if (Type != OPERAND)	// 연산자 이면 -> 왼쪽 오른쪽 재귀를 한다.
+	{
+		Pos = TreeSet(&(*Root)->Left, PostfixExp, Pos);				// 왼쪽에 노드 생성
+		Pos = TreeSet(&(*Root)->Right, PostfixExp, Pos);		// 오른쪽에 노드 생성
+	}
 
-    // 결과값 변수
-    double Result = 0.0;
-
-
-    return Result;
+	return Pos;
 }
 
 // 토큰이 몇개인지 세어본다.
@@ -86,6 +84,9 @@ int GetTokenNum(char* Exp)
 */
 int Exp_Parser_Backward(char* Token, char* Exp, int Pos, int* Type)
 {
+	/*
+	*/
+
 	// 토큰들을 담을 빈 스택 생성
 	LinkedListStack* Stack;
 	CreateStack(&Stack);
@@ -96,16 +97,21 @@ int Exp_Parser_Backward(char* Token, char* Exp, int Pos, int* Type)
 	// 임시로 담을 토큰
 	char Temp_Token[10] = { 0 };
 
+	// 오류가 있음.. -> Type을 담을 배열을 생성 -> 이 배열은 토큰수에 따라 가변적이어야 하는데..
+	int Types[10] = { 0 };
+
 	// 토큰별로 스택에 차곡차곡 담는다.
-	for (int i = 0; i < Length;)
+	for (int i = 0, j = 0; i < Length; j++)
 	{
 		i = Exp_Parser(Temp_Token, Exp, i, Type);
 
 		Push(Stack, CreateNode(Temp_Token));
+		Types[j] = *Type;
 	}
 
 	// 나눠진 문자열을 담을 2차원 배열을 선언한다.
-	int Token_List_Length = GetSize(Stack);
+	int ListLength = GetSize(Stack);
+	int Token_List_Length = ListLength;
 	char** Token_List = (char**)calloc(sizeof(char*), Token_List_Length);
 
 	for (int i = 0; i < Token_List_Length; i++)
@@ -119,7 +125,9 @@ int Exp_Parser_Backward(char* Token, char* Exp, int Pos, int* Type)
 		DestroyNode(TempNode);
 	}
 
-	strcpy(Token, Token_List[Pos++]);
+	strcpy(Token, Token_List[Pos]);
+	*Type = Types[ListLength - 1 - Pos];
+	Pos++;
 
 	// 토큰 리스트 파괴
 	for (int i = 0; i < Token_List_Length; i++)
@@ -289,6 +297,32 @@ int IsNum(char c_Target)
 	return 0;
 }
 
+// 연산자인지 아닌지 알려준다.
+int IsOp(char c_Target)
+{
+	int Result = 0;
+
+	switch (c_Target)
+	{
+	case PLUS: 
+		Result = PLUS;
+		break;
+	case MULTIPLY: 
+		Result = MULTIPLY;
+		break;
+	case DIVIDE:
+		Result = DIVIDE;
+		break; 
+	case MINUS:
+		Result = MINUS;
+		break;
+	default:
+		break;
+	}
+
+	return Result;
+}
+
 /*
 	연산자 우선순위 판별 함수
 		인자 1이 우선순위가 2보다 높거나 같으면 : 참값
@@ -300,4 +334,27 @@ int IsPrior(char Target, char Compare)
 			return 0;
 
 	return 1;
+}
+
+// 타입에 따라 두 피연산자를 계산해준다.
+double Type_Cal(double Op1, double Op2, int Type)
+{
+	double Result = 0.0;
+	switch (Type)
+	{
+	case PLUS:
+		Result = Op1 + Op2;
+		break;
+	case MINUS:
+		Result = Op1 - Op2;
+		break;
+	case MULTIPLY:
+		Result = Op1 * Op2;
+		break;
+	case DIVIDE:
+		Result = Op1 / Op2;
+		break;
+	}
+
+	return Result;
 }

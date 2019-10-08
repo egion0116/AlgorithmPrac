@@ -6,8 +6,8 @@ typedef struct tagTreeNode
 {
     ElementType Data;
 
-    struct tagNode* Left;
-    struct tagNode* Right;
+    struct tagTreeNode* Left;
+    struct tagTreeNode* Right;
 }TreeNode;
 
 TreeNode* CreateTreeNode(char* p_Data);

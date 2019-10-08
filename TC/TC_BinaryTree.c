@@ -7,7 +7,7 @@ TreeNode* CreateTreeNode(char* p_Data)
 
     int Length = strlen(p_Data);
     NewTreeNode->Data = (char*)malloc(sizeof(char) * Length + 1);
-    strcpy(NewTreeNode, p_Data);
+    strcpy(NewTreeNode->Data, p_Data);
 
     NewTreeNode->Left = NULL;
     NewTreeNode->Right = NULL;
