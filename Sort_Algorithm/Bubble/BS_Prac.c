@@ -8,7 +8,7 @@ void PrintArr(int Arr[], int Arr_Size);
 void BubbleSort_Asc(int Arr[], int Arr_Size)
 {
 
-    for (int i = 0; i < Arr_Size; i++)
+    for (int i = 0; i < Arr_Size - 1; i++)
     {
         // 최적화 기법 1 -> 첫번째 순회때 한번도 이동이 안생기면 모두 정렬된것으로 판단후 나간다.
         int Count = 0;
