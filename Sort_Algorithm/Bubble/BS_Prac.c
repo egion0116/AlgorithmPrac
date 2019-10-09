@@ -44,19 +44,19 @@ void PrintArr(int Arr[], int Arr_Size)
 
 int main(void)
 {
-    int arr[10000] = { 0 };
-    int arr_Size = sizeof(arr) / sizeof(int);
+    int Arr_Size = 10000;
+    int* Arr = (int*)calloc(sizeof(int), Arr_Size);
 
     srand(time(NULL));
-    for (int i = 0; i < arr_Size; i++)
-        arr[i] = rand();
+    for (int i = 0; i < Arr_Size; i++)
+        Arr[i] = rand();
 
     // 버블소트 하는데 사용한 클럭수
     clock_t Clock_Bubble = clock();
-    BubbleSort_Asc(arr, arr_Size);
+    BubbleSort_Asc(Arr, Arr_Size);
     Clock_Bubble = clock() - Clock_Bubble;
 
-    // PrintArr(arr, arr_Size);
+    // PrintArr(arr, Arr_Size);
     printf("Spend Time : %lf\n", (double)Clock_Bubble / CLOCKS_PER_SEC);
 
     return 0;
