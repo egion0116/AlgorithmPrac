@@ -2,13 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
+void BubbleSort_Asc(int Arr[], int Arr_Size);
+void PrintArr(int Arr[], int Arr_Size);
+
 void BubbleSort_Asc(int Arr[], int Arr_Size)
 {
-    // 최적화 기법 1 -> 첫번째 순회때 한번도 버블
-    int Count = 0;
 
     for (int i = 0; i < Arr_Size; i++)
     {
+        // 최적화 기법 1 -> 첫번째 순회때 한번도 이동이 안생기면 모두 정렬된것으로 판단후 나간다.
+        int Count = 0;
+
         // 최적화 기법 2 -> 이미 정렬이 된 수는 다시 정렬하지 않는다.
         for (int j = 0; j < Arr_Size - i - 1; j++)
         {
@@ -40,18 +44,20 @@ void PrintArr(int Arr[], int Arr_Size)
 
 int main(void)
 {
-    int arr[100000] = { 0 };
+    int arr[10000] = { 0 };
     int arr_Size = sizeof(arr) / sizeof(int);
 
     srand(time(NULL));
     for (int i = 0; i < arr_Size; i++)
         arr[i] = rand();
 
-    clock_t t = clock();
+    // 버블소트 하는데 사용한 클럭수
+    clock_t Clock_Bubble = clock();
     BubbleSort_Asc(arr, arr_Size);
-    t = clock() - t;
+    Clock_Bubble = clock() - Clock_Bubble;
+
     // PrintArr(arr, arr_Size);
-    printf("Spend Time : %lf\n", (double)t / CLOCKS_PER_SEC);
+    printf("Spend Time : %lf\n", (double)Clock_Bubble / CLOCKS_PER_SEC);
 
     return 0;
 }
