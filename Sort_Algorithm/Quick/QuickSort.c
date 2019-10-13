@@ -92,10 +92,21 @@ void Print(int Arr[], int Length)
 	}
 }
 
+int Comparison(const void* _elem1, const void* _elem2)
+{
+    const int* elem1 = (int*)_elem1;
+    const int* elem2 = (int*)_elem2;
+
+    if (*elem1 >= *elem2)
+        return 1;
+    else if (*elem1 < *elem2)
+        return -1;
+}
+
 int main(void)
 {
-	int Arr[1000000] = { 0 };
-	int Length = sizeof(Arr) / sizeof(int);
+	int Length = 1000000;
+	int* Arr = (int*)calloc(sizeof(int), Length);
 
 	RandomSet(Arr, Length);
 
@@ -112,6 +123,14 @@ int main(void)
 	Spent = clock() - Spent;
 
 	printf("QuickSort_2 : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+
+    RandomSet(Arr, Length);
+
+	Spent = clock();
+    qsort((void*)Arr, Length, sizeof(int), Comparison);
+	Spent = clock() - Spent;
+
+	printf("QuickSort_3 : %lf\n", (double)Spent / CLOCKS_PER_SEC);
 
 	return 0;
 }
