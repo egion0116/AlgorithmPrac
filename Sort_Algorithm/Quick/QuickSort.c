@@ -15,6 +15,8 @@
 		3. 중복키를 잡기위해 3 point way를 사용한다. 
 			-> 파티션시에 ld와 rd변수를 추가적으로 이용해 중복되는 값을 한곳에 몰아넣는다.
 			-> 이후 ld 왼쪽으로 rd 오른쪽으로 추가 재귀를 하면 중복키를 막을 수 있다.
+
+		이를 재귀로 구현할 시 스택오버플로우가 일어남... 이중에서 가장 효과적인 방법은 1번 방법임.. 많은 케이스에서 처리시간이 짧아진다.
 */
 
 // 퀵소트보다 삽입정렬이 더 빠른 정보의 갯수
@@ -25,6 +27,32 @@ void Swap(int* Left, int* Right)
 	int Temp = *Left;
 	*Left = *Right;
 	*Right = Temp;
+}
+
+int MedianOfThree_Mid(int Arr[], int Left, int Right)
+{	
+	// 소수버림은 의도된것임
+	int Mid_Index = Left + (int)((Right - Left) / 2);
+
+	// 소수버림은 의도된것임
+	int Median = (int)((Arr[Left] + Arr[Mid_Index] + Arr[Right]) / 3);
+
+	return Median;
+}
+
+int MedianOfThree_Random(int Arr[], int Left, int Right)
+{
+	int Width = (Right - Left);
+	srand((unsigned int)time(NULL));
+
+	int Index_One = Left + (rand() % Width);
+	int Index_Two = Left + (rand() % Width);
+	int Index_Three = Left + (rand() % Width);
+
+	// 소수버림은 의도된것임
+	int Median = (int)((Arr[Index_One] + Arr[Index_Two] + Arr[Index_Three]) / 3);
+
+	return Median;
 }
 
 int Another_Partition(int Arr[], int Left, int Right)
@@ -67,6 +95,23 @@ int Partition(int Arr[], int Left, int Right)
 	return i;
 }
 
+// 피봇을 받아 어떤값을 받든 Right값에 영향을 받지 않게 한다.
+int Partition_Indep(int Arr[], int Left, int Right, int Pivot)
+{
+	int i = Left;
+
+	for (int j = Left; j <= Right; j++)
+	{
+		if (Arr[j] <= Pivot)
+		{
+			Swap(&Arr[i], &Arr[j]);
+			i++;
+		}
+	}
+
+	return i;
+}
+
 void QuickSort(int Arr[], int Left, int Right, int(*partition)(int*, int, int))
 {
 	if (Left > Right)
@@ -87,10 +132,12 @@ void QuickSort_Optimized(int Arr[], int Left, int Right, int(*partition)(int*, i
 		return;
 	}
 	
-	int Pivot = partition(Arr, Left, Right);
+	// 최적화 방법 2 : 임의의 세 인덱스를 잡아 그 값의 중간값으로 피봇팅을 하면 최악의 수를 피할 수 있다.
+	int Pivot = MedianOfThree_Random(Arr, Left, Right);
+	int Tomb= Partition_Indep(Arr, Left, Right, Pivot);
 
-	QuickSort_Optimized(Arr, Left, Pivot - 1, partition);
-	QuickSort_Optimized(Arr, Pivot + 1, Right, partition);
+	QuickSort_Optimized(Arr, Left, Tomb - 1, partition);
+	QuickSort_Optimized(Arr, Tomb + 1, Right, partition);
 }
 
 int Comparison(const void* _elem1, const void* _elem2)

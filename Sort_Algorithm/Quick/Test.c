@@ -24,7 +24,7 @@ void PrintAll(int Arr[], int Length)
 
 int main(void)
 {
-	int Length = 1000000;
+	int Length = 18000;
 	int* Arr = (int*)calloc(sizeof(int), Length);
 
 	SetArrRandom(Arr, Length);
