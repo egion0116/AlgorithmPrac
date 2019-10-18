@@ -1,18 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include "stdfx.h"
+#include "QuickSort.h"
+#include "Insertion.h"
 
 /*
     두가지 파티션 방법에 따라 속도가 달라지는것을 알 수 있다.
 */
 
-void Swap(int* Left, int* Right);
-int Another_Partition(int Arr[], int Left, int Right);
-int Partition(int Arr[], int Left, int Right);
-void QuickSort(int Arr[], int Left, int Right, int(*partition)(int*, int, int));
+/*
+	퀵 소트의 최적화 방법 3가지
+		1. 퀵소트의 효율이 삽입정렬과 일치되는 컷오프 자료양은 10개정도이다.
+			따라서, 10개이하의 자료에 대해서는 파티션이 아닌 인서션을 사용하는 편이 낫다.
+		2. 파티션을 하기위해 피봇을 잡을때 3값을 잡아(Randomly 하게 잡는게 가장 좋다) 
+			그 값들의 중간값을 피봇으로 잡는게 최악의 수를 방지할 수 있는 방법이다.
+		3. 중복키를 잡기위해 3 point way를 사용한다. 
+			-> 파티션시에 ld와 rd변수를 추가적으로 이용해 중복되는 값을 한곳에 몰아넣는다.
+			-> 이후 ld 왼쪽으로 rd 오른쪽으로 추가 재귀를 하면 중복키를 막을 수 있다.
+*/
 
-void RandomSet(int Arr[], int Length);
-void Print(int Arr[], int Length);
+// 퀵소트보다 삽입정렬이 더 빠른 정보의 갯수
+#define QuickSort_CutOff 10
 
 void Swap(int* Left, int* Right)
 {
@@ -72,24 +78,19 @@ void QuickSort(int Arr[], int Left, int Right, int(*partition)(int*, int, int))
 	QuickSort(Arr, Pivot + 1, Right, partition);
 }
 
-void RandomSet(int Arr[], int Length)
+void QuickSort_Optimized(int Arr[], int Left, int Right, int(*partition)(int*, int, int))
 {
-	srand((unsigned int)time(NULL));
-
-	for (int i = 0; i < Length; i++)
-		Arr[i] = rand();
-}
-
-void Print(int Arr[], int Length)
-{
-	for (int i = 0, Number = 1; i < Length; i++)
+	// 최적화 방법 1 : 10보다 작은 정보양에 대해서는 삽입정렬을 사용하는게 더 빠를수 있다.
+	if (Right - Left + 1 <= QuickSort_CutOff)
 	{
-		if (i % 10 == 0)
-			printf("%d :\t", Number++);
-		printf("%d\t", Arr[i]);
-		if (i % 10 == 9)
-			putchar('\n');
+		Insertion_Interval(Arr, Left, Right);
+		return;
 	}
+	
+	int Pivot = partition(Arr, Left, Right);
+
+	QuickSort_Optimized(Arr, Left, Pivot - 1, partition);
+	QuickSort_Optimized(Arr, Pivot + 1, Right, partition);
 }
 
 int Comparison(const void* _elem1, const void* _elem2)
@@ -99,38 +100,6 @@ int Comparison(const void* _elem1, const void* _elem2)
 
     if (*elem1 >= *elem2)
         return 1;
-    else if (*elem1 < *elem2)
-        return -1;
-}
 
-int main(void)
-{
-	int Length = 1000000;
-	int* Arr = (int*)calloc(sizeof(int), Length);
-
-	RandomSet(Arr, Length);
-
-	clock_t Spent = clock();
-	QuickSort(Arr, 0, Length - 1, Partition);
-	Spent = clock() - Spent;
-
-	printf("QuickSort_1 : %lf\n", (double)Spent / CLOCKS_PER_SEC);
-
-	RandomSet(Arr, Length);
-
-	Spent = clock();
-	QuickSort(Arr, 0, Length - 1, Another_Partition);
-	Spent = clock() - Spent;
-
-	printf("QuickSort_2 : %lf\n", (double)Spent / CLOCKS_PER_SEC);
-
-    RandomSet(Arr, Length);
-
-	Spent = clock();
-    qsort((void*)Arr, Length, sizeof(int), Comparison);
-	Spent = clock() - Spent;
-
-	printf("QuickSort_3 : %lf\n", (double)Spent / CLOCKS_PER_SEC);
-
-	return 0;
+    return -1;
 }

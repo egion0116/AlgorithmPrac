@@ -1,5 +1,6 @@
 #include "stdfx.h"
 #include "Insertion.h"
+#include "QuickSort.h"
 
 void SetArrRandom(int Arr[], int Length)
 {
@@ -23,12 +24,40 @@ void PrintAll(int Arr[], int Length)
 
 int main(void)
 {
-    int Arr[1000] = { 0 };
-    int Length = sizeof(Arr) / sizeof(int);
+	int Length = 1000000;
+	int* Arr = (int*)calloc(sizeof(int), Length);
+
+	SetArrRandom(Arr, Length);
+
+	clock_t Spent = clock();
+	QuickSort(Arr, 0, Length - 1, Partition);
+	Spent = clock() - Spent;
+
+	printf("QuickSort_FestPartition : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+
+	// SetArrRandom(Arr, Length);
+
+	// Spent = clock();
+	// QuickSort(Arr, 0, Length - 1, Another_Partition);
+	// Spent = clock() - Spent;
+
+	// printf("QuickSort_SlowPartiton : %lf\n", (double)Spent / CLOCKS_PER_SEC);
 
     SetArrRandom(Arr, Length);
 
-    Insertion_Sort(Arr, Length);
+	Spent = clock();
+    qsort((void*)Arr, Length, sizeof(int), Comparison);
+	Spent = clock() - Spent;
 
-    PrintAll(Arr, Length);
+	printf("QuickSort_std : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+
+    SetArrRandom(Arr, Length);
+
+    Spent = clock();
+    QuickSort_Optimized(Arr, 0, Length - 1, Partition);
+	Spent = clock() - Spent;
+
+	printf("QuickSort_Optimized : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+
+	return 0;
 }

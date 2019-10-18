@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall
-OBJS=Test.o Insertion.o
+OBJS=Test.o Insertion.o QuickSort.o
 TARGET=Test
 
 all: ${TARGET}
@@ -12,5 +12,6 @@ clear:
 ${TARGET}: ${OBJS}
 	${CC} -o $@ $^
 
-Test.o: Test.c Insertion.h stdfx.h
+Test.o: Test.c Insertion.h QuickSort.h stdfx.h
 Insertion.o: Insertion.c Insertion.h stdfx.h
+QuickSort.o: QuickSort.c QuickSort.h Insertion.h stdfx.h
