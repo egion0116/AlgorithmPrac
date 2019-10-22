@@ -1,0 +1,23 @@
+Stack Overflow에서 논의되었던 
+
+Why the ugly keywords in C11?
+
+에 대한 납득가능한 답변입니다.
+
+
+
+Names beginning with an underscore and a capital letter (and anything with double underscore) were reserved for compiler/standard library implementation in previous standards.
+
+From Reserved Identifiers of C89 and C99:
+
+    Also reserved for the implementor are all external identifiers beginning with an underscore, and all other identifiers beginning with an underscore followed by a capital letter or an underscore.
+
+So in theory, those new keywords should not be in use in any code writen before and that leads to better backward compatibility than any simple name, which is likely the only reason.
+
+
+위 내용에서 언급된 Reserved Identifiers of C99의 경우 실제 초고를 뒤져 사실임을 확인했습니다.
+
+짧게 말해, 많은 컴파일러 벤더가 이미 불리언 형을 _Bool형태로 사용하고 있었고, 
+이것은 C표준에서 제시된 "구현하는 측에 의해 제공되는 식별자의 경우 언더스코어(_)와 첫글자를 대문자로 시작한다" 는 규칙에 의해 작성되고 있는 상태였습니다.
+
+이를 훗날 표준에서 정리하면서 _Bool타입이 표준으로 들어간것이 아닌가 하는 설명이었습니다.
