@@ -55,4 +55,6 @@ void NR_QuickSort(int Arr[], int Length)
             Push(Req_Stack, Pivot + 1, Req_Node.Right);
         }
     }
+
+    DestroyStack(&Req_Stack);
 }

@@ -1,6 +1,9 @@
 #include "stdfx.h"
 #include "NR_Stack.h"
 
+// 실험 1 : 기본 스택사이즈가 미치는 영향을 알아본다. -> 메모리를 재할당하는 사이클이 상당히 길기때문에 지연이 일어나는것임을 확인
+// 결과.. -> 전혀 상관이 없다. 사이즈가 커져도 천만단위 데이터를 퀵소팅 하는데 걸리는 시간차는 미미했다.
+// 즉, 메모리를 재할당하는데 걸리는 시간은 현실적으로 거의 성능에 영향을 미치지 않는다.
 const unsigned int BASIC_STACK_SIZE = 100;
 
 void SetNode(Node* p_Node, int Left, int Right)

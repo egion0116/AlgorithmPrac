@@ -21,9 +21,21 @@ void SetArrRandom(int Arr[], int Length)
         Arr[i] = rand();
 }
 
+int Comparison(const void* _elem1, const void* _elem2)
+{
+    const int* elem1 = (int*)_elem1;
+    const int* elem2 = (int*)_elem2;
+
+    if (*elem1 >= *elem2)
+        return 1;
+
+    return -1;
+}
+
+
 int main(void)
 {
-    int Length = 18000;
+    int Length = 10000000;
     int* Arr = (int*)calloc(sizeof(int), Length);
 
     SetArrRandom(Arr, Length);
@@ -31,8 +43,16 @@ int main(void)
     clock_t Spent = clock();
     NR_QuickSort(Arr, Length);
     Spent = clock() - Spent;
-    
+
     printf("Non-Recursive QuickSort : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+
+    SetArrRandom(Arr, Length);
+
+    Spent = clock();
+    qsort((void*)Arr, Length, sizeof(int), Comparison);
+    Spent = clock() - Spent;
+
+    printf("QuickSort_std : %lf\n", (double)Spent / CLOCKS_PER_SEC);
 
     return 0;
 }

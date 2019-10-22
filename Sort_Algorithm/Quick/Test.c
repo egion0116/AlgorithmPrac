@@ -24,7 +24,7 @@ void PrintAll(int Arr[], int Length)
 
 int main(void)
 {
-	int Length = 18000;
+	int Length = 10000000;
 	int* Arr = (int*)calloc(sizeof(int), Length);
 
 	SetArrRandom(Arr, Length);
@@ -51,13 +51,14 @@ int main(void)
 
 	printf("QuickSort_std : %lf\n", (double)Spent / CLOCKS_PER_SEC);
 
-    SetArrRandom(Arr, Length);
+	// 콜스텍 오버플로우가 난다.
+    // SetArrRandom(Arr, Length);
 
-    Spent = clock();
-    QuickSort_Optimized(Arr, 0, Length - 1, Partition);
-	Spent = clock() - Spent;
+    // Spent = clock();
+    // QuickSort_Optimized(Arr, 0, Length - 1, Partition);
+	// Spent = clock() - Spent;
 
-	printf("QuickSort_Optimized : %lf\n", (double)Spent / CLOCKS_PER_SEC);
+	// printf("QuickSort_Optimized : %lf\n", (double)Spent / CLOCKS_PER_SEC);
 
 	return 0;
 }
